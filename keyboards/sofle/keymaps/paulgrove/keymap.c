@@ -335,6 +335,13 @@ void housekeeping_task_user(void) {
 
 #define FLUT_FLOOR 11
 
+void write_chars(char character, uint8_t len) {
+	uint8_t i;
+	for (i = 0; i < len; i++) {
+		oled_write_char(character + i, false); // flut head 1
+	}
+}
+
 int8_t lastElev = 0;
 static void render_fluttershy(void) {
 	int8_t elev = FLUT_FLOOR - (get_current_wpm() / 15);
@@ -345,81 +352,45 @@ static void render_fluttershy(void) {
 		flutterstate.data ^= 2;
 		lastElev = elev;
 	}
-	oled_set_cursor(0, 0);
+	oled_set_cursor(1, 0);
 	for (_i = 0; _i <= FLUT_FLOOR; _i++) {
 		if (_i != elev) {
-			oled_write_P(PSTR("     "), false);
+			if (_i == 0) {
+				oled_write_P(PSTR("    *"), false);
+			} else {
+				oled_advance_page(true);
+			}
 			continue;
 		}
 
 		/* LINE 1 */
 		if (FLUT_HEAD_UP) {
-			oled_write_char(0, false); // flut head 1
-			oled_write_char(1, false);
-			oled_write_char(2, false);
+			write_chars(0, 3);
 		} else {
 			oled_write_P(PSTR("   "), false);
 		}
 		if (FLUT_FLAP_UP) {
 			oled_write_char(9, false); // flut wing up 1
-		} else {
-			oled_write_P(PSTR(" "), false);
 		}
-		oled_write_P(PSTR(" "), false);
+		oled_advance_page(true);
 
 		/* LINE 2 */
-		if (FLUT_HEAD_UP) {
-			oled_write_char(3, false); // flut head 2
-			oled_write_char(4, false);
-			oled_write_char(5, false);
-		} else {
-			oled_write_char(0, false); // flut head 1
-			oled_write_char(1, false);
-			oled_write_char(2, false);
-		}
-		if (FLUT_FLAP_UP) {
-			oled_write_char(11, false); // flut wing up 2
-		} else {
-			oled_write_char(23, false); // flut wing down 1
-		}
+		write_chars(FLUT_HEAD_UP ? 3 : 0, 3);
+		oled_write_char(FLUT_FLAP_UP ? 11 : 23, false); // flut wing up 2
 		oled_write_char(15, false); // flut wing tail 1
 
 		/* LINE 3 */
-		if (FLUT_HEAD_UP) {
-			oled_write_char(6, false); // flut head 3
-			oled_write_char(7, false);
-			oled_write_char(8, false);
-		} else {
-			oled_write_char(3, false); // flut head 2
-			oled_write_char(4, false);
-			oled_write_char(5, false);
-		}
-		if (FLUT_FLAP_UP) {
-			oled_write_char(12, false); // flut wing up 3
-		} else {
-			oled_write_char(14, false); // flut wing down 2
-		}
+		write_chars(FLUT_HEAD_UP ? 6 : 3, 3);
+		oled_write_char(FLUT_FLAP_UP ? 12 : 14, false); // flut wing up 3
 		oled_write_char(16, false); // flut wing tail 2
 
 		/* LINE 4 */
 		if (FLUT_HEAD_UP) {
 			oled_write_P(PSTR("  "), false);
-			if (_i == FLUT_FLOOR) {
-				oled_write_char(17, false); // flut foot floor 1
-			} else {
-				oled_write_char(20, false); // flut foot fly 1
-			}
+			write_chars(_i == FLUT_FLOOR ? 17 : 20, 3);
 		} else {
-			oled_write_char(6, false); // flut head 3
-			oled_write_char(7, false);
-			oled_write_char(8, false);
-		}
-		if (_i == FLUT_FLOOR) {
-			oled_write_char(18, false); // flut foot floor 1
-			oled_write_char(19, false); // flut foot floor 1
-		} else {
-			oled_write_char(21, false); // flut foot fly 1
-			oled_write_char(22, false); // flut foot fly 1
+			write_chars(6, 3);
+			write_chars(_i == FLUT_FLOOR ? 18 : 21, 2);
 		}
 
 	}
@@ -776,7 +747,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 				// tap_code(KC_MS_WH_DOWN);
 			}
 		} else if (index == 0) { /* Second encoder */
-			uint16_t mapped_code		= 0;
+			uint16_t mapped_code = 0;
 			if (clockwise) {
 				mapped_code = KC_VOLD;
 			} else {
