@@ -34,7 +34,6 @@ bool isJumping = false;
 bool showedJump = true;
 
 // status variables
-int current_wpm = 0;
 led_t led_usb_state = {
     .num_lock = false,
     .caps_lock = false,
@@ -46,10 +45,9 @@ uint8_t current_frame = 0;
 
 // timers
 uint32_t anim_timer = 0;
-uint32_t anim_sleep = 0;
 
 // logic
-void render_luna(int LUNA_X, int LUNA_Y) {
+void render_luna(int LUNA_X, int LUNA_Y, int current_wpm) {
 
     // Sit
     static const char PROGMEM sit[2][ANIM_SIZE] = {
@@ -212,18 +210,8 @@ void render_luna(int LUNA_X, int LUNA_Y) {
     // animation timer
     if(timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
         anim_timer = timer_read32();
-        current_wpm = get_current_wpm();
         animation_phase();
     }
-
-    // this fixes the screen on and off bug
-    if (current_wpm > 0) {
-        oled_on();
-        anim_sleep = timer_read32();
-    } else if(timer_elapsed32(anim_sleep) > OLED_TIMEOUT) {
-        oled_off();
-    }
-
 }
 
 // KEYBOARD PET END

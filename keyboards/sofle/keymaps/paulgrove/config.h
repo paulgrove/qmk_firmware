@@ -15,12 +15,24 @@
  */
 #pragma once
 
+//#define LEFT_FIRMWARE
+//#define EE_HANDS
+#define ENABLE_FLUTTERSHY
+
+#ifdef LEFT_FIRMWARE
 #define ENABLE_LUNA
+#define ENABLE_HAUNTER
+#define ENABLE_FLUTTERSHY_MASTER
+#else
+#define ENABLE_FLUTTERSHY_SLAVE
+#define ENABLE_FLUTTERSHY_DISPLAY
+#endif
+
 #define OLED_FONT_H "keyboards/sofle/keymaps/paulgrove/flutter-font.c"
 #define OLED_FONT_START 0
 #define OLED_FONT_END 127
 #define OLED_TIMEOUT 0
-#define OLED_TIMEOUT_USER 60000
+#define OLED_TIMEOUT_USER 600000
 #define RGB_DISABLE_TIMEOUT 0
 #define OLED_BRIGHTNESS 120
 
@@ -28,6 +40,8 @@
 #define WPM_SAMPLE_PERIODS 30
 
 #define SPLIT_TRANSACTION_IDS_USER USER_SYNC_A
+
+#undef GRAVE_ESC_GUI_OVERRIDE
 
 /* The way how "handedness" is decided (which half is which),
 see https://docs.qmk.fm/#/feature_split_keyboard?id=setting-handedness
@@ -57,6 +71,7 @@ for more options.
 #define ENABLE_RGB_MATRIX_CYCLE_ALL
 //#define ENABLE_RGB_MATRIX_RAINBOW_PINWHEELS
 #define ENABLE_RGB_MATRIX_SOLID_REACTIVE_MULTICROSS
+#define ENABLE_RGB_MATRIX_SOLID_REACTIVE_NEXUS
 
 #endif
 

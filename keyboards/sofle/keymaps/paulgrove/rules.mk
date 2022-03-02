@@ -9,3 +9,11 @@ COMMAND_ENABLE = no
 MOUSEKEY_ENABLE = no
 SPACE_CADET_ENABLE = no
 MAGIC_ENABLE = no
+
+SRC += flutter-animate.c \
+	   luna.c \
+	   vim-logo.c \
+	   pokemon-logo.c \
+	   gaming-logo.c \
+	   render-oled.c \
+	   enums.c
