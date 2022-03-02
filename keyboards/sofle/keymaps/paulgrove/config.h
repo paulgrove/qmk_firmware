@@ -15,7 +15,7 @@
  */
 #pragma once
 
-//#define LEFT_FIRMWARE
+#define LEFT_FIRMWARE
 //#define EE_HANDS
 #define ENABLE_FLUTTERSHY
 

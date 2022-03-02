@@ -16,4 +16,5 @@ SRC += flutter-animate.c \
 	   pokemon-logo.c \
 	   gaming-logo.c \
 	   render-oled.c \
-	   enums.c
+	   enums.c \
+	   layers.c
